@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Geometric Operations</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            margin-top: 20px;
+            text-align: center;
+        }
+        #container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            width: 90%;
+            max-width: 1000px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .dropzone, .draggable {
+            width: 200px;
+            height: 150px;
+            border: 2px solid #b2b2b2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            background-color: white;
+            cursor: pointer;
+            text-align: center;
+        }
+        .dropzone {
+            border-style: dashed;
+            background-color: #f9f9f9;
+        }
+        .draggable {
+            background-color: #d7eef4;
+            cursor: grab;
+        }
+        .draggable:active {
+            cursor: grabbing;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Interactive Geometric Operations for Format Transformation</h1>
+
+<div id="container">
+    <!-- Drop Zones -->
+    <div class="dropzone" data-target="point-line">Point to Line</div>
+    <div class="dropzone" data-target="point-area">Point to Area</div>
+    <div class="dropzone" data-target="point-field">Point to Field</div>
+    <div class="dropzone" data-target="line-area">Line to Area</div>
+    <div class="dropzone" data-target="line-field">Line to Field</div>
+    <div class="dropzone" data-target="area-field">Area to Field</div>
+
+    <!-- Draggable Items (Text and Image) -->
+    <div class="draggable" draggable="true" data-item="point-line">Network graphs</div>
+    <div class="draggable" draggable="true" data-item="point-area">Proximity polygons</div>
+    <div class="draggable" draggable="true" data-item="point-field">Kernel density estimation</div>
+    <div class="draggable" draggable="true" data-item="line-area">Polygon overlay</div>
+    <div class="draggable" draggable="true" data-item="line-field">Distance surface</div>
+    <div class="draggable" draggable="true" data-item="area-field">Surface models</div>
+</div>
+
+<script>
+    // Add drag and drop functionality
+    const draggables = document.querySelectorAll('.draggable');
+    const dropzones = document.querySelectorAll('.dropzone');
+
+    draggables.forEach(draggable => {
+        draggable.addEventListener('dragstart', () => {
+            draggable.classList.add('dragging');
+        });
+
+        draggable.addEventListener('dragend', () => {
+            draggable.classList.remove('dragging');
+        });
+    });
+
+    dropzones.forEach(dropzone => {
+        dropzone.addEventListener('dragover', e => {
+            e.preventDefault();
+            const draggingItem = document.querySelector('.dragging');
+            if (draggingItem && draggingItem.getAttribute('data-item') === dropzone.getAttribute('data-target')) {
+                dropzone.style.borderColor = 'green';
+            } else {
+                dropzone.style.borderColor = 'red';
+            }
+        });
+
+        dropzone.addEventListener('dragleave', () => {
+            dropzone.style.borderColor = '#b2b2b2';
+        });
+
+        dropzone.addEventListener('drop', e => {
+            e.preventDefault();
+            const draggingItem = document.querySelector('.dragging');
+            if (draggingItem && draggingItem.getAttribute('data-item') === dropzone.getAttribute('data-target')) {
+                dropzone.style.borderColor = '#b2b2b2';
+                dropzone.textContent = draggingItem.textContent;
+                draggingItem.remove(); // Remove the dragged item after placing it
+            } else {
+                alert("Incorrect drop! Try again.");
+                dropzone.style.borderColor = '#b2b2b2';
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
